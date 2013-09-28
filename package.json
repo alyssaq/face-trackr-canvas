@@ -3,12 +3,9 @@
   "version": "0.0.0",
   "description": "Face tracking with canvas",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "github.com/alyssaq"
+    "url": "https://github.com/alyssaq/face-trackr-canvas"
   },
   "author": "Alyssa Quek",
   "license": "BSD",

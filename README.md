@@ -6,6 +6,8 @@ Drawing with [HTML5 canvas](http://www.html5canvastutorials.com/tutorials/html5-
 
 Current version tracks your face via webcam and places a party hat on top of your head.
 
+**Demo*:*  http://alyssaq.github.io/face-trackr-canvas/
+
 ##Usage
 1) Install nodejs   
 2) Run npm install in the project folder   
@@ -14,7 +16,11 @@ In the URL, type: chrome://flags  and search and enable:
 
     Enable screen capture support in getUserMedia()
     
-4) Have fun! Draw more shapes! 
+4) To run in the project folder:
+
+    node app.js
+
+5) Have fun! Draw more shapes!
 
 ##To be added features
 
