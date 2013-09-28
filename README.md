@@ -11,6 +11,7 @@ Current version tracks your face via webcam and places a party hat on top of you
 ##Usage
 1) Install nodejs. The only node module dependency is express.   
 2) To grab node dependencies, run:
+
     > npm install  
 
 3) Enable getUserMedia() in chrome.   
