@@ -6,7 +6,7 @@ Drawing with [HTML5 canvas](http://www.html5canvastutorials.com/tutorials/html5-
 
 Current version tracks your face via webcam and places a party hat on top of your head.
 
-**Demo*:*  http://alyssaq.github.io/face-trackr-canvas/
+**Demo**:  http://alyssaq.github.io/face-trackr-canvas/
 
 ##Usage
 1) Install nodejs   
