@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Face finder fun</title>
+    <style>
+      #inputVideo {display:none;}
+      #kinetic {position:absolute;}
+      #infoBox {position:absolute;}
+    </style>
+  </head>
+  <body style="height:100%;background:black;">
+    <script src="lib/headtrackr.min.js"></script> 
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.7.1.min.js"></script>
+    <div id="kinetic"></div>
+    <div id="infoBox"></div>
+    <canvas id="inputCanvas" width="1024" height="750" ></canvas>
+    <canvas id="drawCanvas" width="1024" height="750" ></canvas>
+
+    <video id="inputVideo" autoplay loop ></video>
+    <script type="text/javascript">
+      var videoInput = document.getElementById('inputVideo');
+      var canvasInput = document.getElementById('inputCanvas');
+      var wedge = null;
+      var htracker = new headtrackr.Tracker({ui : false,calcAngles:true});
+      htracker.init(videoInput, canvasInput);
+      htracker.start();
+
+      document.addEventListener('facetrackingEvent', 
+        function (event) {
+          var infoBox = document.getElementById('infoBox');
+          infoBox.innerHTML = "x:"+event.x + ", y:" + event.y + ", w:" + event.width + ", h:" + event.height;
+
+          var elem = document.getElementById('inputCanvas');
+          var drawCtx = document.getElementById('inputCanvas').getContext('2d');
+          // Always check for properties and methods, to make sure your code doesn't break 
+          // in other browsers.
+          if (elem && elem.getContext) {
+            // Get the 2d context.
+            // Remember: you can only initialize one context per element.
+            var context = elem.getContext('2d');
+            if (context) {
+              context.fillStyle = '#8ED6FF';
+              /// once we have stable tracking, draw rectangle
+              if (event.detection == "CS") {
+              //  infoBox.appendChild("<div>" + -(event.width/2) >> 0 + "</div>")
+                context.translate(event.x, event.y)
+                context.rotate(event.angle-(Math.PI/2));
+
+                context.strokeStyle = "#8ED6FF";
+               // context.strokeRect((-(event.width/2)), (-(event.height/2)), event.width, event.height);
+
+                context.beginPath();
+                context.fillStyle = '#8ED6FF';
+                var w = event.width*0.7, x =  -w/2, y = -event.height/2*0.8;
+                context.moveTo(x, y);
+                context.quadraticCurveTo(0,y-event.height*1.2,x+w,y);
+                context.quadraticCurveTo(0,y+10, x, y);
+                context.fill();
+
+                context.rotate((Math.PI/2)-event.angle);
+                context.translate(-event.x, -event.y);
+/*
+                drawCtx.beginPath();
+                drawCtx.fillStyle = '#8ED6FF';
+                var w = event.width*0.8, x = event.x-w/2, y = event.y-event.height/2;
+                drawCtx.moveTo(x, y);
+                drawCtx.quadraticCurveTo(x+w/2,y-event.height*1.3,x+w,y);
+                drawCtx.quadraticCurveTo(x+w/2,y+10, x, y);
+                drawCtx.fill();
+*/
+
+  // context.save();
+  // context.setTransform(1, 0, 0, 1, 0, 0);
+  // context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  // context.restore();
+                if ( event.y < 250) {
+                    if (wedge) {
+                      wedge.translate(event.x, event.y);
+                    } else {
+                //                     drawCtx.beginPath();
+                // drawCtx.fillStyle = '#8ED6FF';
+                // drawCtx.moveTo(30,65);
+                // drawCtx.quadraticCurveTo(45,-50,60,65);
+                // drawCtx.quadraticCurveTo(45,70,30,65);
+                // drawCtx.fill();
+
+                    }
+                }
+                if (event.x-w/2 < 200) {
+                  // add the shape to the layer
+                  layer.add(circle);
+
+                  // add the layer to the stage
+                  stage.add(layer);
+                }
+              }
+           //   context.fillRect(event.x - (event.width/2), event.y - (event.height/2), event.width, event.height);
+
+
+            }
+          }
+
+        }
+      );
+
+
+      var stage = new Kinetic.Stage({
+        container: 'kinetic',
+        width: 1024,
+        height: 750
+      });
+
+      var layer = new Kinetic.Layer();
+
+
+ 
+
+      var circle = new Kinetic.Circle({
+        x: stage.getWidth() / 2,
+        y: stage.getHeight() / 2,
+        radius: 70,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 4
+      });
+
+    
+
+    </script>
+    
+  </body>
+</html>
