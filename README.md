@@ -9,16 +9,18 @@ Current version tracks your face via webcam and places a party hat on top of you
 **Demo**:  http://alyssaq.github.io/face-trackr-canvas/
 
 ##Usage
-1) Install nodejs   
-2) Run npm install in the project folder   
+1) Install nodejs. The only node module dependency is express.   
+2) To grab node dependencies, run:
+    > npm install  
+
 3) Enable getUserMedia() in chrome.   
 In the URL, type: chrome://flags  and search and enable: 
-
-    Enable screen capture support in getUserMedia()
-    
+   
+> **Enable screen capture support in getUserMedia()**
+       
 4) To run in the project folder:
 
-    node app.js
+    > node app.js
 
 5) Have fun! Draw more shapes!
 
