@@ -4,28 +4,31 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Face finder fun</title>
-    <style>
-      #inputVideo {display:none;}
-      #kinetic {position:absolute;}
-      #infoBox {position:absolute;}
-    </style>
+    
   </head>
   <body style="height:100%;background:black;">
     <script src="lib/headtrackr.min.js"></script> 
-    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.7.1.min.js"></script>
-    <div id="kinetic"></div>
     <div id="infoBox"></div>
     <canvas id="inputCanvas" width="1024" height="750" ></canvas>
-    <canvas id="drawCanvas" width="1024" height="750" ></canvas>
-
+    <canvas id="drawCanvas" width="1024" height="750" ></canvas> -->
+  
     <video id="inputVideo" autoplay loop ></video>
-    <script type="text/javascript">
+
+     <script type="text/javascript">
       var videoInput = document.getElementById('inputVideo');
       var canvasInput = document.getElementById('inputCanvas');
       var wedge = null;
       var htracker = new headtrackr.Tracker({ui : false,calcAngles:true});
       htracker.init(videoInput, canvasInput);
       htracker.start();
+
+      function snapshot() {
+        if (localMediaStream) {
+          ctx.drawImage(video, 0, 0);
+          // "image/webp" works in Chrome 18. In other browsers, this will fall back to image/png.
+          document.querySelector('img').src = canvas.toDataURL('image/webp');
+        }
+      }
 
       document.addEventListener('facetrackingEvent', 
         function (event) {
@@ -105,29 +108,7 @@
       );
 
 
-      var stage = new Kinetic.Stage({
-        container: 'kinetic',
-        width: 1024,
-        height: 750
-      });
-
-      var layer = new Kinetic.Layer();
-
-
- 
-
-      var circle = new Kinetic.Circle({
-        x: stage.getWidth() / 2,
-        y: stage.getHeight() / 2,
-        radius: 70,
-        fill: 'red',
-        stroke: 'black',
-        strokeWidth: 4
-      });
-
-    
-
-    </script>
+     </script>
     
   </body>
 </html>

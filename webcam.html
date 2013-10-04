@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Face-find-fun</title>
+</head>
+<body style="height:100%;background:black;">
+
+  <!-- HTML5 video element -->
+  <video id="inputVideo" autoplay></video>
+
+<script type="text/javascript">  
+  /* Cross-browser window.URL */
+  window.URL = window.URL || window.webkitURL;
+  /* Feature detection of navigator.getUserMedia */
+  navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+  /* Grab video element */
+  var video = document.getElementById("inputVideo");
+
+  /* Feed video src a Blob URL obtained from a LocalMediaStream object representing the webcam */
+  if (navigator.getUserMedia) {
+    navigator.getUserMedia({video: true}, function(stream) {
+      video.src = window.URL.createObjectURL(stream);
+    });
+  }
+
+</script>
+</body>
+</html>
