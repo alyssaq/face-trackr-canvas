@@ -17,6 +17,7 @@ app.get('/:view', function(req, res) {
 var port = process.env.PORT || 8080;
 app.listen(port, function() {
   console.log("Listening on " + port);
+
 });
 
 function getHtmlFile(fileName) {
