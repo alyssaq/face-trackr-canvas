@@ -5,17 +5,16 @@
     <meta charset="utf-8">
     <title>Face-find-fun</title>
       <style> 
-      #infoBox {position:absolute;padding:10px;background-color:grey;}
-      video, canvas {width:1024px;height:750px;}
+      #infoBox {position:absolute;padding:10px;background-color:grey;z-index:1;}
+      video {width:1024px; height:750px;}
     </style>
 </head>
 <body style="height:100%;background:black;">
   <div id="infoBox"> </div>
   <canvas id="inputCanvas" width="1024" height="750" style="display:none;" >  </canvas>
-  <canvas id="drawCanvas" width="1024" height="750" >  </canvas>
   <canvas id="overlay" width="1024" height="750">  </canvas>
 
-  <video id="inputVideo"  width="1024" height="750" autoplay></video>
+  <video id="inputVideo" autoplay></video>
   
   <script src="lib/headtrackr.min.js">  </script>
 <script type="text/javascript">  
@@ -31,8 +30,9 @@
     infoBox = document.getElementById("infoBox"),
     canvasOverlay = document.getElementById('overlay'),
     ctx = canvasOverlay.getContext('2d'),
-    vctx = document.getElementById('drawCanvas').getContext('2d'),
-    inGreyMode = false, inChangeModeArea = false;
+    inChangeModeArea = false, i = 0,
+    filters = ["hue-rotate(180deg)", "grayscale()", "sepia(100%)", 
+               "saturate(500%)", "blur(5px)", "invert()", "normal"];
 
   canvasOverlay.style.position = "absolute";
   canvasOverlay.style.top = '0px';
@@ -40,39 +40,39 @@
   canvasOverlay.style.display = 'block';
 
   var statusMessages = {
-    "whitebalance" : "checking for stability of camera whitebalance",
-    "detecting" : "Detecting face",
-    "hints" : "Hmm. Detecting the face is taking a long time",
-    "redetecting" : "Lost track of face, redetecting",
-    "lost" : "Lost track of face",
-    "found" : "Found and tracking face!"
+    "whitebalance" : "Checking for stability of camera whitebalance",
+    "detecting"    : "Detecting face",
+    "hints"        : "Hmm. Detecting the face is taking a long time",
+    "redetecting"  : "Lost track of face, redetecting",
+    "lost"         : "Lost track of face",
+    "found"        : "Found and tracking face!"
   };
   document.addEventListener('headtrackrStatus', 
     function (event) {
       if (event.status in statusMessages) {
         infoBox.innerHTML = statusMessages[event.status];
       }
-    }, true);
+  }, true);
 
   /* Initialize headtrackr with video (for mediastream), and canvas (to copy videoframes) */
   var htracker = new headtrackr.Tracker({ui:false, calcAngles:true});
   htracker.init(video, canvas);
   htracker.start();
-  
+
   // Draw on the canvas when we detect a face
   document.addEventListener("facetrackingEvent", function( event ) {
     // clear canvas
     ctx.clearRect(0,0,1024,750);
-    // once we have stable tracking, draw rectangle
+    
     if (event.detection === "CS") {
       infoBox.innerHTML = "x:" +event.x + ", y:" + event.y + ", w:" + event.width + ", h:" + event.height;
 
       ctx.translate(event.x, event.y)
       ctx.rotate(event.angle-(Math.PI/2));
-      //ctx.strokeStyle = "#00CC00";
+      //ctx.strokeStyle = "#00CC00";  // Draw rectangle around face
       //ctx.strokeRect((-(event.width/2)), (-(event.height/2)), event.width, event.height);
 
-      ctx.beginPath();
+      ctx.beginPath(); //Draw a hat
       ctx.fillStyle = '#8ED6FF';
       var w = event.width*0.65, h = event.height*0.7, x =  -w/2, y = -h/2;
       ctx.moveTo(x, y);
@@ -80,15 +80,13 @@
       ctx.quadraticCurveTo(0,y+10, x, y);
       ctx.fill();
 
-
       ctx.rotate((Math.PI/2)-event.angle);
       ctx.translate(-event.x, -event.y);
-      vctx.drawImage(canvas, 0, 0);
-      if (inGreyMode) goGrey();
-
+      
       if (event.x < 250) {
         if (!inChangeModeArea) {
-          inGreyMode = inGreyMode ? false : true;
+          i = i % filters.length;
+          video.setAttribute("style","-webkit-filter:" + filters[i++]);
           inChangeModeArea = true;
         }
       } else {
@@ -96,18 +94,6 @@
       }
     }
   });
-
-  function goGrey() {
-    var imageData = vctx.getImageData(0, 0, 1024, 750),
-     data = imageData.data, bright;
-    for (var i = 0; i < data.length; i += 4) {
-      bright = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
-      data[i] = bright;
-      data[i + 1] = bright;
-      data[i + 2] = bright;
-    }
-    vctx.putImageData(imageData, 0, 0);
-  }
 })();
 </script>
 </body>
