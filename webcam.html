@@ -15,8 +15,9 @@
   <video id="inputVideo" autoplay></video>
 
   <button onClick="changeFilter();">Fun</button>
+
 <script type="text/javascript">  
-(function() {
+
   /* Cross-browser window.URL */
   window.URL = window.URL || window.webkitURL;
   /* Feature detection of navigator.getUserMedia */
@@ -39,7 +40,6 @@
     i = i % filters.length;
     video.setAttribute("style","-webkit-filter:" + filters[i++]);
   }
-})();
 </script>
 </body>
 </html>
