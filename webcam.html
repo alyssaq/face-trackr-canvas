@@ -11,35 +11,45 @@
     </style>
 </head>
 <body>
+
   <!-- HTML5 video element -->
-  <video id="inputVideo" autoplay></video>
+  <video id="inputVideo" autoplay> </video>
 
-  <button onClick="changeFilter();">Fun</button>
-
+  <button id="btn"> Fun </button>
 <script type="text/javascript">  
-
+(function() {
   /* Cross-browser window.URL */
-  window.URL = window.URL || window.webkitURL;
+   window.URL = window.URL || window.webkitURL;
   /* Feature detection of navigator.getUserMedia */
   navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
+                            navigator.mozGetUserMedia || navigator.msGetUserMedia;
   /* Grab video element */
   var video = document.getElementById("inputVideo");
-  
+
   /* Feed video src a Blob URL obtained from a LocalMediaStream object representing the webcam */
   if (navigator.getUserMedia) {
-    navigator.getUserMedia({video: true}, function(stream) {
-      video.src = window.URL.createObjectURL(stream);
-    });
+    navigator.getUserMedia({video: true},
+      function(stream) { //success callback
+        video.src = window.URL.createObjectURL(stream);
+      },
+      function(err) { // error callback
+        console.log("The following error occured: " + err);
+      }
+    );
   }
 
-  var i = 0, filters = ["hue-rotate(180deg)", "grayscale()", "sepia(100%)", 
-                        "saturate(500%)", "blur(5px)", "invert()", "normal"];
+  /* Change the CSS filter when we click on the button */
+  document.getElementById("btn").onclick = changeFilter();
+
   function changeFilter() {
-    i = i % filters.length;
-    video.setAttribute("style","-webkit-filter:" + filters[i++]);
+    var i = 0, filters = ["grayscale()", "hue-rotate(180deg)", "sepia(100%)", 
+                        "saturate(500%)", "blur(5px)", "invert()", "normal"];
+    return function() {
+      i = i % filters.length;
+      video.setAttribute("style","-webkit-filter:" + filters[i++]);
+    }
   }
+})();
 </script>
 </body>
 </html>
